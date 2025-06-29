@@ -80,7 +80,7 @@ class BugHunter(ChatWithBreakdownMixin, BaseAgent):
             )
             .require_schema(TestSteps)
         )
-        bug_reproduction_instructions: TestSteps = await llm(convo, parser=JSONParser(TestSteps), temperature=0)
+        bug_reproduction_instructions: TestSteps = await llm(convo, parser=JSONParser(TestSteps), temperature=0, json_mode=True)
         self.next_state.current_iteration["bug_reproduction_description"] = json.dumps(
             [test.dict() for test in bug_reproduction_instructions.steps]
         )
@@ -104,7 +104,7 @@ class BugHunter(ChatWithBreakdownMixin, BaseAgent):
             .require_schema(HuntConclusionOptions)
         )
         llm = self.get_llm()
-        hunt_conclusion = await llm(convo, parser=JSONParser(HuntConclusionOptions), temperature=0)
+        hunt_conclusion = await llm(convo, parser=JSONParser(HuntConclusionOptions), temperature=0, json_mode=True)
 
         bug_hunting_cycles = self.current_state.current_iteration.get("bug_hunting_cycles")
         num_bug_hunting_cycles = len(bug_hunting_cycles) if bug_hunting_cycles else 0
@@ -210,7 +210,7 @@ class BugHunter(ChatWithBreakdownMixin, BaseAgent):
 
         llm = self.get_llm()
         convo = convo.template("data_about_logs").require_schema(ImportantLogsForDebugging)
-        data_about_logs = await llm(convo, parser=JSONParser(ImportantLogsForDebugging), temperature=0.5)
+        data_about_logs = await llm(convo, parser=JSONParser(ImportantLogsForDebugging), temperature=0.5, json_mode=True)
 
         await self.ui.send_data_about_logs(
             {

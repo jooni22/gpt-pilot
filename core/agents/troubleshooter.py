@@ -196,7 +196,7 @@ class Troubleshooter(ChatWithBreakdownMixin, IterationPromptMixin, RelevantFiles
             )
             .require_schema(TestSteps)
         )
-        user_instructions: TestSteps = await llm(convo, parser=JSONParser(TestSteps))
+        user_instructions: TestSteps = await llm(convo, parser=JSONParser(TestSteps), json_mode=True)
 
         if len(user_instructions.steps) == 0:
             await self.ui.send_message(
@@ -214,7 +214,7 @@ class Troubleshooter(ChatWithBreakdownMixin, IterationPromptMixin, RelevantFiles
 
         llm = self.get_llm()
         convo = AgentConvo(self).template("get_route_files").require_schema(RouteFilePaths)
-        file_list = await llm(convo, parser=JSONParser(RouteFilePaths))
+        file_list = await llm(convo, parser=JSONParser(RouteFilePaths), json_mode=True)
         route_files: set[str] = set(file_list.files)
 
         # Sometimes LLM can return a non-existent file, let's make sure to filter those out
@@ -353,7 +353,7 @@ class Troubleshooter(ChatWithBreakdownMixin, IterationPromptMixin, RelevantFiles
             )
             .require_schema(BugReportQuestions)
         )
-        llm_response: BugReportQuestions = await llm(convo, parser=JSONParser(BugReportQuestions))
+        llm_response: BugReportQuestions = await llm(convo, parser=JSONParser(BugReportQuestions), json_mode=True)
 
         if not llm_response.missing_data:
             return []

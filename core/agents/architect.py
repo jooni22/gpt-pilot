@@ -133,7 +133,7 @@ class Architect(BaseAgent):
             )
             .require_schema(TemplateSelection)
         )
-        tpl: TemplateSelection = await llm(convo, parser=JSONParser(TemplateSelection))
+        tpl: TemplateSelection = await llm(convo, parser=JSONParser(TemplateSelection), json_mode=True)
         templates = {}
         # if tpl.template:
         #     answer = await self.ask_question(
@@ -176,7 +176,7 @@ class Architect(BaseAgent):
             )
             .require_schema(Architecture)
         )
-        arch: Architecture = await llm(convo, parser=JSONParser(Architecture))
+        arch: Architecture = await llm(convo, parser=JSONParser(Architecture), json_mode=True)
 
         await self.check_compatibility(arch)
 
@@ -281,4 +281,4 @@ class Architect(BaseAgent):
             )
             .require_schema(template_class.options_class)
         )
-        return await llm(convo, parser=JSONParser(template_class.options_class))
+        return await llm(convo, parser=JSONParser(template_class.options_class), json_mode=True)

@@ -166,5 +166,27 @@ class Convo:
     def __repr__(self) -> str:
         return f"<Convo({self.messages})>"
 
+    def truncate(self, max_tokens: int = 4096):
+        """
+        Truncate the conversation to fit within the token limit.
+
+        This method removes messages from the middle of the conversation
+        until the total token count is below the specified limit.
+
+        :param max_tokens: Maximum number of tokens allowed.
+        """
+        # This is a simplified version of what was in gpt-pilot 0.1.
+        # It might need to be improved, but for now it should be enough
+        # to get us out of the "too many tokens" error loop.
+        # We can make it smarter later if needed.
+        total_tokens = sum(len(msg["content"]) for msg in self.messages)
+        if total_tokens <= max_tokens:
+            return
+
+        # Simplified truncation: remove messages from the middle
+        while total_tokens > max_tokens and len(self.messages) > 2:
+            # Don't remove system message or the last message
+            removed_message = self.messages.pop(1)
+            total_tokens -= len(removed_message["content"])
 
 __all__ = ["Convo"]

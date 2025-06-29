@@ -59,7 +59,7 @@ class Importer(BaseAgent):
         self.send_message("Inspecting most important project files ...")
 
         convo = AgentConvo(self).template("get_entrypoints")
-        llm_response = await llm(convo, parser=JSONParser())
+        llm_response = await llm(convo, parser=JSONParser(), json_mode=True)
         relevant_files = [f for f in self.current_state.files if f.path in llm_response]
 
         self.send_message("Analyzing project ...")

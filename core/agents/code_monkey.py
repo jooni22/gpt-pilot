@@ -164,7 +164,7 @@ class CodeMonkey(FileDiffMixin, BaseAgent):
                 )
                 .require_schema(FileDescription)
             )
-            llm_response: FileDescription = await llm(convo, parser=JSONParser(spec=FileDescription))
+            llm_response: FileDescription = await llm(convo, parser=JSONParser(spec=FileDescription), json_mode=True)
 
             file.meta = {
                 **file.meta,
@@ -276,7 +276,7 @@ class CodeMonkey(FileDiffMixin, BaseAgent):
             )
             .require_schema(ReviewChanges)
         )
-        llm_response: ReviewChanges = await llm(convo, temperature=0, parser=JSONParser(ReviewChanges))
+        llm_response: ReviewChanges = await llm(convo, temperature=0, parser=JSONParser(ReviewChanges), json_mode=True)
 
         for i in range(MAX_REVIEW_RETRIES):
             reasons = {}
@@ -303,7 +303,7 @@ class CodeMonkey(FileDiffMixin, BaseAgent):
 
             # Max two retries; if the reviewer still hasn't reviewed all hunks, we'll just use the entire new content
             convo.assistant(llm_response.model_dump_json()).user(error)
-            llm_response = await llm(convo, parser=JSONParser(ReviewChanges))
+            llm_response = await llm(convo, parser=JSONParser(ReviewChanges), json_mode=True)
         else:
             return new_content, None
 

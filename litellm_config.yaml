@@ -1,0 +1,8 @@
+model_list:
+  - model_name: gpt-4-gemini-proxy
+    litellm_params:
+      model: gemini/gemini-1.5-pro-latest
+      api_key: os.environ/GEMINI_API_KEY
+
+litellm_settings:
+  drop_params: True

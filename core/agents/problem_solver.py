@@ -61,6 +61,7 @@ class ProblemSolver(IterationPromptMixin, BaseAgent):
             convo,
             parser=JSONParser(spec=AlternativeSolutions),
             temperature=1,
+            json_mode=True,
         )
         self.next_state_iteration["alternative_solutions"] = self.iteration["alternative_solutions"] + [
             {

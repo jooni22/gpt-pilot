@@ -163,7 +163,7 @@ class Executor(BaseAgent):
             )
             .require_schema(CommandResult)
         )
-        return await llm(convo, parser=JSONParser(spec=CommandResult), temperature=0)
+        return await llm(convo, parser=JSONParser(spec=CommandResult), temperature=0, json_mode=True)
 
     def complete(self):
         """

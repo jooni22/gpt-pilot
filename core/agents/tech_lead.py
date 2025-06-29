@@ -193,7 +193,7 @@ class TechLead(RelevantFilesMixin, BaseAgent):
             .require_schema(DevelopmentPlan)
         )
 
-        response: DevelopmentPlan = await llm(convo, parser=JSONParser(DevelopmentPlan))
+        response: DevelopmentPlan = await llm(convo, parser=JSONParser(DevelopmentPlan), json_mode=True)
 
         convo.remove_last_x_messages(1)
         formatted_epics = [f"Epic #{index}: {epic.description}" for index, epic in enumerate(response.plan, start=1)]
@@ -238,7 +238,7 @@ class TechLead(RelevantFilesMixin, BaseAgent):
                     get_only_api_files=True,
                 ).require_schema(EpicPlan)
                 await self.send_message("Creating tasks for this epic ...")
-                epic_plan: EpicPlan = await llm(convo, parser=JSONParser(EpicPlan))
+                epic_plan: EpicPlan = await llm(convo, parser=JSONParser(EpicPlan), json_mode=True)
                 self.next_state.tasks = self.next_state.tasks + [
                     {
                         "id": uuid4().hex,
@@ -284,6 +284,9 @@ class TechLead(RelevantFilesMixin, BaseAgent):
         return AgentResponse.done(self)
 
     def update_epics_and_tasks(self, edited_plan_string):
+        if not edited_plan_string:
+            return
+
         edited_plan = json.loads(edited_plan_string)
         updated_tasks = []
 

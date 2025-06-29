@@ -1,0 +1,130 @@
+### **Project: "Nexus" \- Integrated Business Suite Frontend**
+
+**Project Goal:** To create a modern, responsive, and intuitive frontend for an all-in-one business application. The interface will provide access to file management, documentation, task tracking, project overviews, communication tools, and other business utilities, all without a backend implementation for this phase.
+
+### **Phase 1: Foundation & Scaffolding (1-2 Weeks)**
+
+This phase focuses on setting up the project environment, defining the core structure, and establishing the design system.
+
+* **1.1. Technology Stack Selection:**  
+  * **Framework:** React.js (or Vue.js/Angular, but React is recommended for its component-based architecture and large ecosystem).  
+  * **Styling:** Tailwind CSS for rapid, utility-first styling to ensure a consistent and modern look.  
+  * **State Management:** React Context API for managing global state (like the current view, user settings) without external libraries.  
+  * **Icons:** A comprehensive icon library like Lucide Icons or Font Awesome.  
+* **1.2. Project Setup:**  
+  * Initialize the project using Create React App or Vite.  
+  * Install and configure Tailwind CSS.  
+  * Set up a clear folder structure (e.g., src/components, src/pages, src/assets, src/data, src/utils).  
+* **1.3. Design System & Core Components:**  
+  * Define a basic design system: color palette, typography, spacing, and component styles (buttons, inputs, modals).  
+  * Create a library of reusable "atomic" components:  
+    * Button (primary, secondary, icon-only)  
+    * Input (text, search)  
+    * Modal  
+    * Card  
+    * SidebarItem  
+    * TopNavbar  
+* **1.4. Mock Data Strategy:**  
+  * Create JSON files in src/data to simulate backend data. This will include mock files, folders, tasks, projects, documentation articles, chat messages, etc. This is crucial for building the UI without a live backend.
+
+### **Phase 2: Main Layout & Navigation (1 Week)**
+
+This phase focuses on building the main application shell that will house all the features.
+
+* **2.1. Main App Layout:**  
+  * Create the primary layout component (App.js or MainLayout.js).  
+  * Implement the top navigation bar containing the global search input.  
+  * Implement the main content area.  
+* **2.2. Sidebar Navigation:**  
+  * Develop the collapsible left sidebar.  
+  * Populate the sidebar with links to all the main features (Drive, Docs, Tasks, etc.).  
+  * Implement the routing logic (using a simple state management approach, not a full routing library) to switch between different "pages" or views when a sidebar item is clicked.
+
+### **Phase 3: Feature Development (4-6 Weeks)**
+
+This is the most extensive phase, where each feature is built as a separate module or set of components.
+
+* **3.1. Company Drive (1 Week):**  
+  * **UI:** Design a file/folder grid and list view, similar to Google Drive.  
+  * **Components:** FileIcon, FolderIcon, FileListItem, FolderListItem, BreadcrumbNavigation.  
+  * **Functionality:**  
+    * Display files and folders from mock data.  
+    * Implement file/folder selection.  
+    * Create a non-functional "Upload" button that opens the file dialog.  
+    * Implement a "Download" button for selected files (can simulate a download).  
+    * Basic search filtering of the displayed files based on the top search bar.  
+* **3.2. Documentation (Wikipedia-style) (1 Week):**  
+  * **UI:** A two-panel layout: a sidebar with a tree of articles and a main content area to display the selected article.  
+  * **Components:** ArticleTree, ArticleContent.  
+  * **Functionality:**  
+    * Render a nested list of documentation categories and articles from mock data.  
+    * Display the content of the selected article (can be Markdown rendered into HTML).  
+* **3.3. Tasks/Assignments (1 Week):**  
+  * **UI:** A Kanban board view (like Trello/Jira) with columns for "To Do," "In Progress," and "Done."  
+  * **Components:** TaskCard, KanbanColumn.  
+  * **Functionality:**  
+    * Display tasks from mock data in their respective columns.  
+    * Implement drag-and-drop functionality to move tasks between columns.  
+    * Clicking a task opens a modal with more details (description, assignee, due date).  
+* **3.4. Projects Overview (1/2 Week):**  
+  * **UI:** A gallery of project cards.  
+  * **Components:** ProjectCard.  
+  * **Functionality:**  
+    * Display a list of all company projects from mock data.  
+    * Each card could show the project name, a brief description, and key members.  
+    * Clicking a card would navigate to a placeholder "Project Details" view.  
+* **3.5. Chat (1/2 Week):**  
+  * **UI:** A simple chat interface.  
+  * **Components:** ChatWindow, MessageBubble, ChatInput.  
+  * **Functionality:**  
+    * Display a static conversation from mock data.  
+    * Allow the user to type and "send" a message, which adds it to the UI (it won't actually be sent).  
+*   **3.6. Other Applications (1 Week):**  
+    *   **Spreadsheet:**  
+        *   **UI:** Design a grid-based interface resembling a basic spreadsheet, complete with row and column headers.  
+        *   **Components:** `SpreadsheetCell`, `RowHeader`, `ColumnHeader`, `SpreadsheetGrid`.  
+        *   **Functionality:** Allow users to select individual cells and input basic text data. This feature will focus solely on the visual representation and data entry, without implementing any formulas, calculations, sorting, or advanced spreadsheet functionalities.  
+    *   **Document Editor:**  
+        *   **UI:** A dedicated area for editing Markdown content, and distinct views for `.docx` and `.pdf` files.  
+        *   **Components:** `MarkdownEditor`, `DocxPlaceholder`, `PdfPlaceholder`, `DownloadButton`.  
+        *   **Functionality:** Enable basic text editing for mock `.md` content. For `.docx` and `.pdf` files, display a placeholder indicating the file type and a non-functional "Download" button to simulate file retrieval. No actual document rendering or complex editing features will be implemented.  
+    *   **Email:**  
+        *   **UI:** A static, non-functional replica of a typical email client interface, including an inbox view, a reading pane, and a compose window.  
+        *   **Components:** `InboxList`, `EmailListItem`, `EmailReadingPane`, `ComposeButton`, `ComposeWindow`.  
+        *   **Functionality:** Display a static list of mock emails in the inbox. Clicking an email will show its static content in the reading pane. The "Compose" button will open a non-functional compose window. All interactions will be purely UI-based.  
+    *   **Calendar:**  
+        *   **UI:** A static monthly calendar grid, clearly displaying days of the month.  
+        *   **Components:** `CalendarGrid`, `DayCell`, `EventMarker`.  
+        *   **Functionality:** Highlight specific days to indicate the presence of mock events. There will be no functionality for creating, editing, or interacting with events beyond their static display.  
+    *   **Analytics:**  
+        *   **UI:** A dashboard presenting various static charts and graphs.  
+        *   **Components:** `DashboardLayout`, `ChartContainer`, `BarChart`, `LineGraph`, `PieChart`.  
+        *   **Functionality:** Display visualizations (e.g., bar charts, line graphs, pie charts) populated with mock data to represent business metrics. The focus is on presenting a visually appealing dashboard, without real-time data updates, interactive filtering, or drill-down capabilities.
+
+### **Phase 4: Integration & Refinement (1 Week)**
+
+This phase focuses on tying everything together and polishing the user experience.
+
+*   **4.1. Global Search Integration:**  
+    *   Connect the top search bar to all relevant modules.  
+    *   Typing in the search bar should filter the content in the currently active view (e.g., filter files in Drive, articles in Docs, tasks in Tasks).  
+*   **4.2. Responsiveness & Cross-Browser Testing:**  
+    *   Ensure the layout and all components are fully responsive and work well on different screen sizes (desktop, tablet, mobile).  
+    *   Test the application on major browsers (Chrome, Firefox, Safari).  
+*   **4.3. Final UI/UX Polish:**  
+    *   Add smooth transitions and animations.  
+    *   Review all UI elements for consistency.  
+    *   Ensure all interactive elements have clear hover and active states.
+
+### **Technology & Architecture Summary**
+
+*   **Frontend:** React (Vite)  
+*   **Styling:** Tailwind CSS  
+*   **State:** React Context API  
+*   **Data:** Mock JSON files  
+*   **Architecture:** Component-based, with a clear separation of concerns. Each feature will be a self-contained set of components that can be developed and tested in isolation.
+
+**UI Kit Preference:**
+For the development of UI components, it is preferred to utilize the **Shadcn UI Kit**. Shadcn UI offers a collection of accessible and customizable components built on Radix UI and styled with Tailwind CSS, which aligns perfectly with the project's chosen styling framework. If, however, the integration of Shadcn UI Kit proves unfeasible or problematic, the agent is empowered to select any other suitable UI component library or to construct components from scratch, ensuring that the chosen approach maintains visual consistency and adheres to the established Tailwind CSS styling.
+
+This plan provides a structured approach to building a complex frontend application without a backend. By relying on mock data and focusing on a strong component architecture, you can create a fully interactive and visually complete prototype.

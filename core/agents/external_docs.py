@@ -99,7 +99,7 @@ class ExternalDocumentation(BaseAgent):
             .require_schema(SelectedDocsets)
         )
         await self.send_message("Determining if external documentation is needed for the next task...")
-        llm_response: SelectedDocsets = await llm(convo, parser=JSONParser(spec=SelectedDocsets))
+        llm_response: SelectedDocsets = await llm(convo, parser=JSONParser(spec=SelectedDocsets), json_mode=True)
         available_docsets = dict(available_docsets)
         return {k: available_docsets[k] for k in llm_response.docsets if k in available_docsets}
 
@@ -122,7 +122,7 @@ class ExternalDocumentation(BaseAgent):
                 )
                 .require_schema(DocQueries)
             )
-            llm_response: DocQueries = await llm(convo, parser=JSONParser(spec=DocQueries))
+            llm_response: DocQueries = await llm(convo, parser=JSONParser(spec=DocQueries), json_mode=True)
             if llm_response.queries:
                 queries[k] = llm_response.queries
 

@@ -163,7 +163,7 @@ class Developer(ChatWithBreakdownMixin, RelevantFilesMixin, BaseAgent):
             .template("parse_task")
             .require_schema(TaskSteps)
         )
-        response: TaskSteps = await llm(convo, parser=JSONParser(TaskSteps), temperature=0)
+        response: TaskSteps = await llm(convo, parser=JSONParser(TaskSteps), temperature=0, json_mode=True)
 
         self.set_next_steps(response, source)
 
@@ -241,7 +241,7 @@ class Developer(ChatWithBreakdownMixin, RelevantFilesMixin, BaseAgent):
 
         llm = self.get_llm(PARSE_TASK_AGENT_NAME)
         convo.template("parse_task").require_schema(TaskSteps)
-        response: TaskSteps = await llm(convo, parser=JSONParser(TaskSteps), temperature=0)
+        response: TaskSteps = await llm(convo, parser=JSONParser(TaskSteps), temperature=0, json_mode=True)
 
         # There might be state leftovers from previous tasks that we need to clean here
         self.next_state.modified_files = {}

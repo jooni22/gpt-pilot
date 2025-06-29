@@ -259,15 +259,9 @@ class BaseLLMClient:
                 if err_code in ("request_too_large", "context_length_exceeded", "string_above_max_length"):
                     # Handle OpenAI and Groq token limit exceeded
                     # OpenAI will return `string_above_max_length` for prompts more than 1M characters
-                    message = "".join(
-                        [
-                            "We sent too large request to the LLM, resulting in an error. ",
-                            "This is usually caused by including framework files in an LLM request. ",
-                            "Here's how you can get Pythagora to ignore those extra files: ",
-                            "https://bit.ly/faq-token-limit-error",
-                        ]
-                    )
-                    raise APIError(message) from err
+                    log.warning("Token limit exceeded, truncating conversation and retrying.")
+                    convo.truncate()
+                    continue
 
                 log.warning(f"API error: {err}", exc_info=True)
                 request_log.error = str(f"API error: {err}")

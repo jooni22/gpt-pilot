@@ -156,7 +156,7 @@ class RelevantFilesMixin:
         )
 
         while not done and len(convo.messages) < 23:
-            llm_response: RelevantFiles = await llm(convo, parser=JSONParser(RelevantFiles), temperature=0)
+            llm_response: RelevantFiles = await llm(convo, parser=JSONParser(RelevantFiles), temperature=0, json_mode=True)
             action = llm_response.action
             if action is None:
                 convo.remove_last_x_messages(2)
