@@ -1,0 +1,3 @@
+node
+prosta aplikacja do listy zadań w React
+yes
