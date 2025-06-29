@@ -70,8 +70,9 @@ Poniżej znajduje się lista wszystkich plików dokumentacji utworzonych w katal
 | installation.md | 301 | ~18KB | Podstawowy | Wysoki |
 | troubleshooting.md | 89 | ~5KB | Podstawowy | Średni |
 | faq.md | 176 | ~10KB | Podstawowy | Średni |
+| ui-system.md | 304 | ~18KB | Średni | Wysoki |
 
-**Razem:** ~1,358 linii, ~78KB dokumentacji
+**Razem:** ~1,662 linii, ~96KB dokumentacji
 
 ## 🎯 Zalecana kolejność czytania
 

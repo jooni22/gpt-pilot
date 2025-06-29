@@ -12,6 +12,7 @@ Witaj w dokumentacji GPT-Pilot v2! Ten katalog zawiera kompleksową dokumentacj�
 ### Komponenty systemu
 - [**Agenci**](agents.md) - Opis wszystkich agentów i ich ról w systemie
 - [**Modele LLM**](llm-integration.md) - Integracja z różnymi modelami językowymi
+- [**System UI**](ui-system.md) - Interfejsy użytkownika (konsola, VS Code, testy)
 - [**System promptów**](prompts-system.md) - Jak działają prompty i szablony
 - [**Szablony projektów**](project-templates.md) - System generowania projektów
 - [**Baza danych**](database.md) - Schemat bazy danych i modele
