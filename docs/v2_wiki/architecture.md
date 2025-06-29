@@ -82,9 +82,15 @@ GPT-Pilot to system oparty na architekturze agentów, gdzie każdy agent ma spec
 1. **Inicjalizacja:** `main.py` uruchamia orchestrator
 2. **Analiza:** Architect analizuje wymagania użytkownika
 3. **Planowanie:** Tech Lead tworzy plan implementacji
-4. **Implementacja:** Developer i Code Monkey piszą kod
-5. **Testowanie:** Bug Hunter sprawdza jakość kodu
-6. **Rozwiązywanie problemów:** Troubleshooter naprawia błędy
+4. **Implementacja:** Developer wykonuje zadania z cyklem:
+   - Wykonanie zadania (`execute_task`)
+   - Sprawdzenie potrzeby interwencji użytkownika (`step_human_intervention`)
+   - Weryfikacja postępu (`development_task_check`)
+   - Post-processing i decyzja o kontynuacji (`continue_development`)
+5. **Szczegółowe zmiany:** Code Monkey implementuje konkretne modyfikacje
+6. **Testowanie:** Bug Hunter sprawdza jakość kodu
+7. **Debugowanie:** Zintegrowany debugger rozwiązuje problemy w czasie rzeczywistym
+8. **Rozwiązywanie problemów:** Troubleshooter naprawia złożone błędy
 
 ## 💾 Zarządzanie stanem
 

@@ -26,11 +26,21 @@ GPT-Pilot wykorzystuje system specjalizowanych agentów, z których każdy ma ko
 - Pisanie kodu aplikacji
 - Strukturyzacja projektu
 - Podział zadań na mniejsze części
+- Zarządzanie cyklem rozwoju z możliwością interwencji użytkownika
+
+**Szczegółowy przepływ pracy:**
+1. `execute_task` - Rozpoczęcie wykonywania zadania
+2. `step_human_intervention` - Sprawdzenie czy potrzebna interwencja użytkownika
+3. `send_message` - Komunikacja z użytkownikiem/systemem
+4. `development_task_check` - Weryfikacja postępu zadania
+5. `task_post_processing` - Przetwarzanie wyników
+6. `continue_development` - Decyzja o kontynuacji lub zakończeniu
 
 **Kluczowe prompty:**
 - `system.prompt` - Definicja roli developera
 - `breakdown.prompt` - Podział zadań na części
 - `filter_files.prompt` - Filtrowanie plików do modyfikacji
+- `iteration.prompt` - Iteracyjne ulepszanie kodu
 
 ### 3. Code Monkey (`code_monkey.py`)
 **Rola:** Wykonawca szczegółowych zmian w kodzie  
@@ -96,10 +106,14 @@ GPT-Pilot wykorzystuje system specjalizowanych agentów, z których każdy ma ko
 1. **Orchestrator** inicjuje projekt
 2. **Architect** analizuje wymagania i wybiera technologie
 3. **Tech Lead** tworzy plan implementacji
-4. **Developer** implementuje główne funkcjonalności
+4. **Developer** implementuje główne funkcjonalności z możliwością:
+   - Interwencji użytkownika w kluczowych momentach
+   - Weryfikacji każdego kroku implementacji
+   - Iteracyjnego ulepszania kodu
 5. **Code Monkey** wykonuje szczegółowe zmiany
 6. **Bug Hunter** testuje i znajduje błędy
 7. **Troubleshooter** rozwiązuje problemy techniczne
+8. **Debugger** (zintegrowany) - diagnostyka i rozwiązywanie błędów w czasie rzeczywistym
 
 ### Komunikacja między agentami:
 - Każdy agent może przekazać kontrolę innemu agentowi
