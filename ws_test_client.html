@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Test Client</title>
+    <style>
+        body { font-family: sans-serif; margin: 2em; }
+        #status { font-weight: bold; margin-bottom: 1em; }
+        #messages { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; height: 400px; overflow-y: scroll; background-color: #f9f9f9; }
+        #question-container { padding: 15px; border: 1px solid #007bff; background-color: #f0f7ff; margin-top: 1em; }
+        .message { margin-bottom: 5px; padding: 5px; border-bottom: 1px solid #eee; }
+        .message pre { white-space: pre-wrap; word-wrap: break-word; margin: 0; }
+        .source { font-weight: bold; color: #0056b3; }
+        input[type="text"] { width: calc(100% - 22px); padding: 10px; margin-bottom: 10px; }
+        button { padding: 10px 15px; margin-right: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>WebSocket Test Client</h1>
+    <div id="status">Connecting...</div>
+    <h2>Messages</h2>
+    <div id="messages"></div>
+    <div id="question-container" style="display: none;">
+        <h3 id="question-text"></h3>
+        <div id="question-input-area">
+            <input type="text" id="response-text" placeholder="Type your answer here...">
+        </div>
+        <div id="question-buttons"></div>
+        <button id="cancel-button">Cancel</button>
+    </div>
+
+    <script>
+        const statusDiv = document.getElementById('status');
+        const messagesDiv = document.getElementById('messages');
+        const questionContainer = document.getElementById('question-container');
+        const questionText = document.getElementById('question-text');
+        const questionButtons = document.getElementById('question-buttons');
+        const responseText = document.getElementById('response-text');
+        const questionInputArea = document.getElementById('question-input-area');
+        const cancelButton = document.getElementById('cancel-button');
+
+        const ws = new WebSocket("ws://localhost:8127");
+
+        ws.onopen = () => {
+            statusDiv.textContent = "Connected to ws://localhost:8127";
+            statusDiv.style.color = "green";
+            console.log("WebSocket connection opened.");
+        };
+
+        ws.onmessage = (event) => {
+            const msg = JSON.parse(event.data);
+            console.log("Received message:", msg);
+
+            if (msg.type === 'user_input_request') {
+                handleQuestion(msg);
+            } else {
+                logMessage(msg);
+            }
+        };
+
+        ws.onclose = () => {
+            statusDiv.textContent = "Disconnected";
+            statusDiv.style.color = "red";
+            questionContainer.style.display = 'none';
+            console.log("WebSocket connection closed.");
+        };
+
+        ws.onerror = (error) => {
+            statusDiv.textContent = "Error connecting to WebSocket server. Make sure it's running.";
+            statusDiv.style.color = "red";
+            console.error("WebSocket error:", error);
+        };
+
+        function logMessage(msg) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            
+            let content = '';
+            if (msg.content) {
+                if (typeof msg.content === 'object') {
+                    content = JSON.stringify(msg.content, null, 2);
+                } else {
+                    content = msg.content;
+                }
+            }
+
+            messageElement.innerHTML = `
+                <div><span class="source">[${msg.type}]${msg.source ? ' (' + msg.source + ')' : ''}</span></div>
+                <pre>${content}</pre>
+            `;
+            messagesDiv.appendChild(messageElement);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function handleQuestion(msg) {
+            const questionData = msg.content;
+            questionText.textContent = questionData.question;
+            
+            questionButtons.innerHTML = '';
+            responseText.value = questionData.initial_text || '';
+            responseText.placeholder = questionData.placeholder || 'Type your answer here...';
+            questionInputArea.style.display = questionData.buttons_only ? 'none' : 'block';
+
+            if (questionData.buttons) {
+                for (const [key, value] of Object.entries(questionData.buttons)) {
+                    const button = document.createElement('button');
+                    button.textContent = value;
+                    button.onclick = () => sendResponse({ button: key });
+                    questionButtons.appendChild(button);
+                }
+            }
+            
+            if (!questionData.buttons_only) {
+                const submitButton = document.createElement('button');
+                submitButton.textContent = 'Submit';
+                submitButton.onclick = () => sendResponse({ text: responseText.value });
+                questionButtons.appendChild(submitButton);
+            }
+
+            cancelButton.onclick = () => sendResponse({ cancelled: true });
+            questionContainer.style.display = 'block';
+        }
+
+        function sendResponse(responseContent) {
+            const response = {
+                type: "user_response",
+                content: responseContent
+            };
+            console.log("Sending response:", response);
+            ws.send(JSON.stringify(response));
+            questionContainer.style.display = 'none';
+        }
+    </script>
+</body>
+</html>

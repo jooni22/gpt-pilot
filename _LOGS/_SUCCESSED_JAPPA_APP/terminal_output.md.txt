@@ -1,0 +1,624 @@
+[stankiem@stankiem-x9srlf gpt-pilot]$ ls
+config-docker.json   Dockerfile           gpt_pilot.log   LICENSE                        pythagora.log           tests
+config.json          docs                 _IMPORT         litellm_config.yaml            pythagora-vs-code.vsix  venv
+core                 entrypoint.sh        input.txt       main.py                        README.md               workspace
+data                 example-config.json  ipc_server.err  on-event-extension-install.sh  requirements.txt
+docker-compose.yaml  gpt_pilot.err        ipc_server.log  pyproject.toml                 run_interactive.sh
+[stankiem@stankiem-x9srlf gpt-pilot]$ vendstat ^C
+[stankiem@stankiem-x9srlf gpt-pilot]$ vendstat ^C
+[stankiem@stankiem-x9srlf gpt-pilot]$ venv/
+bin/     include/ lib/     lib64/   
+[stankiem@stankiem-x9srlf gpt-pilot]$ venv/
+bin/     include/ lib/     lib64/   
+[stankiem@stankiem-x9srlf gpt-pilot]$ venv/bin/
+alembic          fastapi          jsonschema       mako-render      pip              python           tiny-agents      watchfiles
+distro           httpx            litellm          normalizer       pip3             python3          tqdm             websockets
+dotenv           huggingface-cli  litellm-proxy    openai           pip3.13          python3.13       uvicorn          
+[stankiem@stankiem-x9srlf gpt-pilot]$ venv/bin/
+alembic          fastapi          jsonschema       mako-render      pip              python           tiny-agents      watchfiles
+distro           httpx            litellm          normalizer       pip3             python3          tqdm             websockets
+dotenv           huggingface-cli  litellm-proxy    openai           pip3.13          python3.13       uvicorn          
+[stankiem@stankiem-x9srlf gpt-pilot]$ venv/bin/python
+python      python3     python3.13  
+[stankiem@stankiem-x9srlf gpt-pilot]$ venv/bin/python main.py 
+[Pythagora] What do you want to use to build your app?
+  [node]: Node.js
+  [other]: Other (coming soon)
+> node
+[Pythagora] What is the project name?
+> jappa
+[Frontend] Please describe the app you want to build.
+> A simple TODO app in plain JavaScript, HTML and CSS.
+[Frontend] Do you need authentication in your app (login, register, etc.)?
+  [yes]: Yes
+  [no]: No (default)
+> no
+[Frontend] Setting up the project...
+
+[Frontend] Building the frontend... This may take a couple of minutes
+
+[Frontend] Running command: `cd client && npm install react-router-dom lucide-react @hookform/resolvers zod react-hook-form sonner @radix-ui/react-toast`...
+
+(node:611469) Warning: Setting the NODE_TLS_REJECT_UNAUTHORIZED environment variable to '0' makes TLS connections and HTTPS requests insecure by disabling certificate verification.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+up to date, audited 457 packages in 3s
+
+81 packages are looking for funding
+  run `npm fund` for details
+
+2 moderate severity vulnerabilities
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+[Frontend] Continuing to build UI... This may take a couple of minutes
+
+[Frontend] Do you want to change anything or report a bug? Keep in mind that currently ONLY frontend is implemented.
+  [yes]: I'm done building the UI (default)
+>
+[Frontend] Are you sure you're done building the UI and want to start building the backend functionality now?
+  [yes]: Yes, let's build the backend (default)
+  [no]: No, continue working on the UI
+>
+[Human Input] Input required on server/.env:5
+
+[Human Input] Please open server/.env and modify line 5 according to the instructions.
+  [continue]: Continue (default)
+>
+[Human Input] Input required on server/.env:6
+
+[Human Input] Please open server/.env and modify line 6 according to the instructions.
+  [continue]: Continue (default)
+>
+[Human Input] Input required on server/.env:7
+
+[Human Input] Please open server/.env and modify line 7 according to the instructions.
+  [continue]: Continue (default)
+>
+[Spec Writer] Checking the complexity of the prompt ...
+
+[Architect] Planning project architecture ...
+
+[Architect] Selecting starter templates ...
+
+[Architect] Picking technologies to use ...
+
+{
+  "app_type": "web-app",
+  "system_dependencies": [],
+  "package_dependencies": []
+}
+[Architect] 
+[Tech Lead] Creating the development plan ...
+
+[Tech Lead] Epic 1: Initial Project
+
+[Tech Lead] Creating tasks for this epic ...
+
+[Tech Lead] Open and edit your development plan in the Progress tab
+  [done_editing]: I'm done editing, the plan looks good (default)
+>
+[Developer] Starting task #1 with the description:
+
+This epic encompasses the complete development of the "jappa" TODO application, covering both the Express.js backend with MongoDB and the ReactJS frontend. The goal is to deliver a fully functional TODO application where users can create, view, update, and delete todo items.
+
+**Backend Tasks:**
+1.  **Database Model Definition**: Create a Mongoose schema and model for `Todo` items in `server/models/Todo.js`. This model should align with the `Todo` interface defined in `client/src/api/todos.ts`, including fields like `title`, `description`, `completed`, and `createdAt`.
+2.  **API Route Implementation**: 
+    *   Create a new route file, `server/routes/todos.js`, to handle all TODO-related API endpoints.
+    *   Implement the following REST API endpoints:
+        *   `GET /api/todos`: Retrieve all todo items.
+        *   `POST /api/todos`: Create a new todo item.
+        *   `PUT /api/todos/:id`: Update an existing todo item by its `_id`.
+        *   `DELETE /api/todos/:id`: Delete a todo item by its `_id`.
+    *   Ensure all API interactions with the database use the Mongoose `Todo` model.
+3.  **Route Integration**: Integrate the new `todos` routes into `server/server.js` by adding `app.use('/api/todos', require('./routes/todos'));`.
+4.  **Error Handling**: Implement robust error handling for all backend API endpoints, returning appropriate HTTP status codes and error messages.
+
+**Frontend Tasks:**
+1.  **API Integration**: 
+    *   Modify `client/src/api/todos.ts` to switch from mock data to actual backend API calls. This involves uncommenting the `api.get`, `api.post`, `api.put`, and `api.delete` lines and removing the `Promise` based mock implementations.
+    *   Ensure all API functions (`getTodos`, `addTodo`, `updateTodo`, `deleteTodo`) are wrapped in `try/catch` blocks, throwing `new Error(error?.response?.data?.message || error.message);` on failure.
+    *   Verify that `_id` is consistently used for identifying todo items when interacting with the backend.
+2.  **UI Development (Home Page)**: 
+    *   Develop the necessary React components within `client/src/components` to support the TODO application's user interface.
+    *   Implement the main TODO list view on the Home page (`client/src/pages/Home.jsx`).
+    *   **Display Todos**: Fetch and display a list of todo items from the backend.
+    *   **Add Todo**: Implement a form to add new todo items (title, description).
+    *   **Edit Todo**: Implement functionality to edit existing todo items (title, description, completed status).
+    *   **Delete Todo**: Implement functionality to delete todo items.
+    *   **Status Toggle**: Implement a mechanism to toggle the `completed` status of a todo item.
+3.  **Styling and Components**: Utilize `shadcn-ui` components and Tailwind CSS for all UI elements to maintain consistency with the existing project setup.
+4.  **User Feedback**: Implement toast messages (e.g., using a toast library compatible with `shadcn-ui` if available, or a custom one) to provide user feedback for success messages and error messages resulting from API calls.
+
+[Developer] Do you want to execute the above task?
+  [yes]: Yes (default)
+  [edit]: Edit Task
+>
+[Developer] Thinking about how to implement this task ...
+
+To implement the full functionality for the TODO application, we need to set up the backend first by defining the Mongoose model, creating the API routes, and then integrating these routes into the main server file. After the backend is ready, we will modify the frontend API calls to switch from mock data to actual calls to our new backend endpoints.
+
+Here's the plan:
+
+1.  **Create the Todo Mongoose Model**: We will define the `Todo` schema and model in `server/models/Todo.js`. This model will represent the structure of a todo item in our MongoDB database, including `title`, `description`, `completed`, and `createdAt` fields, aligning with the `Todo` interface on the frontend.
+2.  **Implement Backend Todo Routes**: We will create a new file `server/routes/todos.js`. This file will contain the Express.js routes for handling all CRUD operations related to todos:
+    *   `GET /api/todos`: To fetch all todo items.
+    *   `POST /api/todos`: To create a new todo item.
+    *   `PUT /api/todos/:id`: To update an existing todo item by its ID.
+    *   `DELETE /api/todos/:id`: To delete a todo item by its ID.
+    Each route will interact with the `Todo` Mongoose model and include proper error handling.
+3.  **Integrate Todo Routes into Server**: We will modify `server/server.js` to include and use the new `todos` routes, ensuring they are accessible under the `/api/todos` base path.
+4.  **Update Frontend API Calls**: We will modify `client/src/api/todos.ts` to replace the mock data implementations with actual `axios` calls to the newly created backend API endpoints. This involves uncommenting the real API calls and removing the `Promise`-based mock data. We will also ensure that all API calls are wrapped in `try/catch` blocks for robust error handling, displaying appropriate toast messages on the frontend in case of an error.
+
+Let's proceed with the implementation.
+
+**1. Write the Mongoose Todo Model**
+This file will define the schema for our Todo items in the MongoDB database.
+
+**File: `server/models/Todo.js`**
+```javascript
+const mongoose = require('mongoose');
+
+const TodoSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: [true, 'Title is required.'],
+    trim: true,
+    maxlength: [100, 'Title cannot be more than 100 characters.']
+  },
+  description: {
+    type: String,
+    trim: true,
+    maxlength: [500, 'Description cannot be more than 500 characters.']
+  },
+  completed: {
+    type: Boolean,
+    default: false
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+module.exports = mongoose.model('Todo', TodoSchema);
+
+```
+
+**2. Write the Backend Todo Routes**
+This file will define the API endpoints for managing todos.
+
+**File: `server/routes/todos.js`**
+```javascript
+const express = require('express');
+const router = express.Router();
+const Todo = require('../models/Todo');
+
+// GET /api/todos - Retrieve all todo items
+router.get('/', async (req, res) => {
+  try {
+    const todos = await Todo.find().sort({ createdAt: -1 });
+    res.status(200).json({ todos });
+  } catch (error) {
+    console.error('Error fetching todos:', error);
+    res.status(500).json({ message: 'Failed to retrieve todos.', error: error.message });
+  }
+});
+
+// POST /api/todos - Create a new todo item
+router.post('/', async (req, res) => {
+  try {
+    const { title, description } = req.body;
+    if (!title) {
+      return res.status(400).json({ message: 'Title is required to create a todo.' });
+    }
+    const newTodo = await Todo.create({ title, description });
+    res.status(201).json({ success: true, message: 'Todo added successfully', todo: newTodo });
+  } catch (error) {
+    console.error('Error adding todo:', error);
+    // Handle Mongoose validation errors
+    if (error.name === 'ValidationError') {
+      const messages = Object.values(error.errors).map(val => val.message);
+      return res.status(400).json({ message: messages.join(', ') });
+    }
+    res.status(500).json({ message: 'Failed to add todo.', error: error.message });
+  }
+});
+
+// PUT /api/todos/:id - Update an existing todo item
+router.put('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, description, completed } = req.body;
+
+    const todo = await Todo.findById(id);
+    if (!todo) {
+      return res.status(404).json({ message: 'Todo not found.' });
+    }
+
+    // Update fields if provided
+    if (title !== undefined) todo.title = title;
+    if (description !== undefined) todo.description = description;
+    if (completed !== undefined) todo.completed = completed;
+
+    await todo.save();
+
+    res.status(200).json({ success: true, message: 'Todo updated successfully', todo });
+  } catch (error) {
+    console.error(`Error updating todo with id ${req.params.id}:`, error);
+    if (error.name === 'CastError') {
+      return res.status(400).json({ message: 'Invalid Todo ID format.' });
+    }
+    if (error.name === 'ValidationError') {
+      const messages = Object.values(error.errors).map(val => val.message);
+      return res.status(400).json({ message: messages.join(', ') });
+    }
+    res.status(500).json({ message: 'Failed to update todo.', error: error.message });
+  }
+});
+
+// DELETE /api/todos/:id - Delete a todo item
+router.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await Todo.findByIdAndDelete(id);
+    if (!result) {
+      return res.status(404).json({ message: 'Todo not found.' });
+    }
+    res.status(200).json({ success: true, message: 'Todo deleted successfully' });
+  } catch (error) {
+    console.error(`Error deleting todo with id ${req.params.id}:`, error);
+    if (error.name === 'CastError') {
+      return res.status(400).json({ message: 'Invalid Todo ID format.' });
+    }
+    res.status(500).json({ message: 'Failed to delete todo.', error: error.message });
+  }
+});
+
+module.exports = router;
+
+```
+
+**3. Integrate Todo Routes into Server**
+We need to tell our Express server to use the new todo routes.
+
+**File: `server/server.js`**
+```javascript
+// Load environment variables
+require("dotenv").config();
+const mongoose = require("mongoose");
+const express = require("express");
+const session = require("express-session");
+const MongoStore = require('connect-mongo');
+const basicRoutes = require("./routes/index");
+const { connectDB } = require("./config/database");
+const cors = require("cors");
+const todoRoutes = require("./routes/todos"); // Add this line
+
+if (!process.env.DATABASE_URL) {
+  console.error("Error: DATABASE_URL variables in .env missing.");
+  process.exit(-1);
+}
+
+const app = express();
+const port = process.env.PORT || 3000;
+// Pretty-print JSON responses
+app.enable('json spaces');
+// We want to be consistent with URL paths, so we enable strict routing
+app.enable('strict routing');
+
+app.use(cors({}));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+
+// Database connection
+connectDB();
+
+app.on("error", (error) => {
+  console.error(`Server error: ${error.message}`);
+  console.error(error.stack);
+});
+
+// Basic Routes
+app.use(basicRoutes);
+app.use('/api/todos', todoRoutes); // Add this line to integrate todo routes
+
+// If no routes handled the request, it's a 404
+app.use((req, res, next) => {
+  res.status(404).send("Page not found.");
+});
+
+// Error handling
+app.use((err, req, res, next) => {
+  console.error(`Unhandled application error: ${err.message}`);
+  console.error(err.stack);
+  res.status(500).send("There was an error serving your request.");
+});
+
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});
+```
+
+**4. Update Frontend API Calls to Use Backend Endpoints**
+We will now modify `client/src/api/todos.ts` to make actual API calls instead of using mock data.
+
+**File: `client/src/api/todos.ts`**
+```typescript
+import api from './api';
+
+export interface Todo {
+  _id: string;
+  title: string;
+  description: string;
+  completed: boolean;
+  createdAt: string;
+}
+
+// Mock data store - REMOVED as we are now using the backend.
+// let mockTodos: Todo[] = [
+//   { _id: '1', title: 'Buy groceries', description: 'Milk, Eggs, Bread, Butter', completed: false, createdAt: new Date().toISOString() },
+//   { _id: '2', title: 'Walk the dog', description: 'Take Fido to the park for 30 minutes', completed: true, createdAt: new Date(Date.now() - 86400000).toISOString() },
+//   { _id: '3', title: 'Finish report', description: 'Complete the Q3 financial report', completed: false, createdAt: new Date(Date.now() - 172800000).toISOString() },
+//   { _id: '4', title: 'Schedule dentist appointment', description: 'Call Dr. Smith for a check-up', completed: false, createdAt: new Date(Date.now() - 259200000).toISOString() },
+// ];
+
+// Description: Get a list of Todos
+// Endpoint: GET /api/todos
+// Request: {}
+// Response: { todos: Array<Todo> }
+export const getTodos = async () => {
+  // Mocking the response - REMOVED
+  // return new Promise<{ todos: Todo[] }>((resolve) => {
+  //   setTimeout(() => {
+  //     resolve({ todos: [...mockTodos].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) });
+  //   }, 300);
+  // });
+  // Uncomment the below lines to make an actual API call
+  try {
+    const response = await api.get('/api/todos');
+    return response.data; // Backend returns { todos: Array<Todo> }
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message || error.message);
+  }
+};
+
+// Description: Add a new Todo
+// Endpoint: POST /api/todos
+// Request: { title: string, description: string }
+// Response: { success: boolean, message: string, todo: Todo }
+export const addTodo = async (data: { title: string; description: string }) => {
+  // Mocking the response - REMOVED
+  // return new Promise<{ success: boolean; message: string; todo: Todo }>((resolve) => {
+  //   setTimeout(() => {
+  //     const newTodo: Todo = {
+  //       _id: String(mockTodos.length + 1), // Simple mock ID generation
+  //       title: data.title,
+  //       description: data.description,
+  //       completed: false,
+  //       createdAt: new Date().toISOString(),
+  //     };
+  //     mockTodos.push(newTodo);
+  //     resolve({ success: true, message: 'Todo added successfully', todo: newTodo });
+  //   }, 300);
+  // });
+  // Uncomment the below lines to make an actual API call
+  try {
+    const response = await api.post('/api/todos', data);
+    return response.data; // Backend returns { success: boolean, message: string, todo: Todo }
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message || error.message);
+  }
+};
+
+// Description: Update an existing Todo
+// Endpoint: PUT /api/todos/:id
+// Request: { title?: string, description?: string, completed?: boolean }
+// Response: { success: boolean, message: string, todo: Todo }
+export const updateTodo = async (id: string, data: Partial<Omit<Todo, '_id' | 'createdAt'>>) => {
+  // Mocking the response - REMOVED
+  // return new Promise<{ success: boolean; message: string; todo: Todo }>((resolve, reject) => {
+  //   setTimeout(() => {
+  //     const index = mockTodos.findIndex(todo => todo._id === id);
+  //     if (index > -1) {
+  //       mockTodos[index] = { ...mockTodos[index], ...data };
+  //       resolve({ success: true, message: 'Todo updated successfully', todo: mockTodos[index] });
+  //     } else {
+  //       reject(new Error('Todo not found'));
+  //     }
+  //   }, 300);
+  // });
+  // Uncomment the below lines to make an actual API call
+  try {
+    const response = await api.put(`/api/todos/${id}`, data);
+    return response.data; // Backend returns { success: boolean, message: string, todo: Todo }
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message || error.message);
+  }
+};
+
+// Description: Delete a Todo
+// Endpoint: DELETE /api/todos/:id
+// Request: {}
+// Response: { success: boolean, message: string }
+export const deleteTodo = async (id: string) => {
+  // Mocking the response - REMOVED
+  // return new Promise<{ success: boolean; message: string }>((resolve, reject) => {
+  //   setTimeout(() => {
+  //     const initialLength = mockTodos.length;
+  //     mockTodos = mockTodos.filter(todo => todo._id !== id);
+  //     if (mockTodos.length < initialLength) {
+  //       resolve({ success: true, message: 'Todo deleted successfully' });
+  //     } else {
+  //       reject(new Error('Todo not found'));
+  //     }
+  //   }, 300);
+  // });
+  // Uncomment the below lines to make an actual API call
+  try {
+    const response = await api.delete(`/api/todos/${id}`);
+    return response.data; // Backend returns { success: boolean, message: string }
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message || error.message);
+  }
+};
+```
+[Developer] 
+[Developer] Are you happy with the breakdown? Now is a good time to ask questions or suggest changes.
+  [yes]: Yes, looks good! (default)
+>
+[Troubleshooter] Determining how to test the app ...
+
+[Pythagora] Test the app by following these steps:
+[Troubleshooter] 
+
+[Troubleshooter] Please check if the app is working
+  [continue]: Everything works (default)
+  [change]: I want to make a change
+  [bug]: There is an issue
+>
+[Congratulations] CONGRATULATIONS! You reached 100% of your project generation!
+
+For now, you have created 45 files with a total of 2333 lines of code.
+
+Before continuing, Pythagora will create some documentation for the project...
+[Technical Writer] Creating README ...
+
+# jappa
+
+jappa is a full-stack TODO application designed to demonstrate modern web development practices. It features a responsive React-based frontend and a robust Node.js Express backend with MongoDB for data persistence, allowing users to efficiently manage their daily tasks.
+
+## Overview
+
+jappa is structured as a monorepo containing distinct frontend and backend components, designed to work together seamlessly.
+
+### Architecture
+
+*   **Frontend**: Developed with ReactJS, utilizing Vite for a fast development experience. It incorporates the `shadcn-ui` component library and Tailwind CSS for a modern, responsive design, and `react-router-dom` for client-side navigation. The frontend runs on port `5173` and is the primary interface for user interaction. All requests to the backend are routed through endpoints starting with `/api/`.
+*   **Backend**: Built with Node.js and Express, providing a RESTful API for managing todo items. Data is stored in a MongoDB database, managed through the Mongoose ODM. The backend operates on port `3000`.
+*   **Integration**: Both the client and server are managed and launched concurrently using the `concurrently` package via a single `npm run start` command from the project root.
+
+### Frontend API Interaction & Mocking
+
+All API interactions from the frontend to the backend are centralized within the `client/src/api/` directory. This approach ensures a clear separation of concerns and facilitates independent frontend development.
+
+*   **Mocking Strategy**: During frontend development, API responses are mocked to allow work to proceed without a fully implemented backend. Each API function in `client/src/api/` includes a detailed comment block specifying its:
+    *   `Description`: A brief explanation of the API call.
+    *   `Endpoint`: The HTTP method and URL path.
+    *   `Request`: The expected structure of the request payload.
+    *   `Response`: The expected structure of the response data.
+    The actual API calls are initially commented out, and the mock data is returned via a `Promise` with a `setTimeout` to simulate network latency. Developers uncomment the actual API call when the corresponding backend endpoint is ready.
+*   **Error Handling**: API request functions are wrapped in `try/catch` blocks. In case of an error, they `throw new Error(error?.response?.data?.message || error.message);`. The calling component then uses the `useToast` hook to display a descriptive error message to the user.
+*   **MongoDB IDs**: When referencing object IDs from the backend on the frontend, always use the `_id` property (e.g., `todo._id`) as this is MongoDB's standard identifier.
+
+### Project Structure
+
+```
+.
+├── client/             # ReactJS Frontend (Vite, Shadcn UI, Tailwind CSS)
+│   ├── src/
+│   │   ├── api/        # Centralized API request definitions (with mocking)
+│   │   ├── components/ # Reusable React components (e.g., AddTodoForm, TodoCard)
+│   │   ├── contexts/   # React Contexts for global state management (e.g., TodoContext, AuthContext)
+│   │   ├── hooks/      # Custom React hooks (e.g., useToast, useMobile)
+│   │   ├── lib/        # Utility functions (e.g., for class name management)
+│   │   └── pages/      # Page-level React components (e.g., HomePage, Login, Register)
+│   ├── components.json # Shadcn UI configuration
+│   ├── eslint.config.js# ESLint configuration
+│   ├── index.html      # Main HTML entry point
+│   ├── package.json    # Client dependencies and scripts
+│   ├── postcss.config.js# PostCSS configuration
+│   ├── tailwind.config.js# Tailwind CSS configuration
+│   ├── tsconfig.json   # TypeScript configuration
+│   └── vite.config.ts  # Vite build tool configuration
+├── server/             # Node.js Express Backend (MongoDB, Mongoose)
+│   ├── config/         # Database connection configuration (database.js)
+│   ├── models/         # Mongoose schemas (e.g., Todo.js)
+│   ├── routes/         # API endpoint definitions (e.g., todos.js, index.js)
+│   ├── services/       # Backend services (e.g., llmService.js)
+│   ├── .env            # Environment variables (e.g., PORT, DATABASE_URL)
+│   ├── package.json    # Server dependencies and scripts
+│   └── server.js       # Main Express server setup
+├── .gitignore          # Git exclusion rules
+├── package.json        # Root project dependencies and scripts (for concurrently)
+└── pnpm-lock.yaml      # pnpm lock file for reproducible installations
+```
+
+## Features
+
+jappa provides a comprehensive set of features for managing your daily tasks:
+
+*   **Task Creation**: Easily add new todo items with a title and an optional description.
+*   **Task Viewing**: Display all your todo items in a clear, card-based layout.
+*   **Status Tracking**: Mark todo items as completed or incomplete with a simple checkbox.
+*   **Task Editing**: Modify the title and description of existing todo items through a dedicated dialog.
+*   **Task Deletion**: Permanently remove todo items after a confirmation prompt.
+*   **Filtering**: Quickly filter your todo list to view all tasks, only completed tasks, or only pending tasks.
+*   **Responsive User Interface**: A modern and intuitive design built with `shadcn-ui` and Tailwind CSS, ensuring a consistent experience across various devices.
+*   **Real-time Feedback**: Integrated toast notifications provide immediate success or error messages for user actions.
+
+## Getting started
+
+To set up and run the jappa project on your local machine, follow these steps:
+
+### Requirements
+
+Before you begin, ensure you have the following installed on your system:
+
+*   **Node.js**: Version 18 or higher is recommended.
+*   **pnpm**: The package manager used in this project (alternatively, npm can be used).
+*   **MongoDB**: A running instance of MongoDB. You can install it locally or use a cloud service like MongoDB Atlas.
+
+### Quickstart
+
+1.  **Clone the Repository**:
+    If you haven't already, clone the jappa repository to your local machine.
+
+2.  **Install Dependencies**:
+    Navigate to the project root directory in your terminal and install the root-level dependencies (which includes `concurrently`):
+    ```bash
+    pnpm install
+    ```
+    Next, navigate into both the `client` and `server` directories to install their respective dependencies:
+    ```bash
+    cd client
+    pnpm install
+    cd ../server
+    pnpm install
+    cd .. # Return to the project root
+    ```
+
+3.  **Configure Backend Environment Variables**:
+    Create a `.env` file in the `server/` directory and populate it with the following environment variables. Replace the placeholder values with your actual MongoDB connection string and strong, random secret keys:
+    ```
+    # server/.env
+    PORT=3000
+    DATABASE_URL=mongodb://localhost/pythagora # Replace with your MongoDB connection string
+    JWT_SECRET=your_jwt_secret_key_here # Replace with a strong, random string
+    REFRESH_TOKEN_SECRET=another_super_secret_string # Replace with another strong, random string
+    ```
+
+4.  **Start the Application**:
+    From the project root directory, run the combined start command:
+    ```bash
+    pnpm start
+    ```
+    This command uses `concurrently` to start both the frontend (Vite dev server) and backend (Express server) simultaneously.
+
+5.  **Access the Application**:
+    *   **Frontend**: Open your web browser and navigate to `http://localhost:5173`.
+    *   **Backend API**: The backend API will be running on `http://localhost:3000`.
+
+## License
+
+Copyright (c) 2024. All rights reserved.
+[Technical Writer] 
+[Congratulations] Your app is DONE! You can start using it right now!
+[Tech Lead] Do you have a new feature to add to the project? Just write it here:
+  [continue]: continue
+  [end]: No, I'm done
+>
