@@ -55,6 +55,7 @@ class WebSocketUI(UIBase):
         self.pending_question = None
         self.question_response_future = None
         self.conversation_history: List[Dict[str, Any]] = []
+        self.client_connected = asyncio.Event()
 
     async def start(self) -> bool:
         """Uruchom serwer WebSocket"""
@@ -88,6 +89,7 @@ class WebSocketUI(UIBase):
         client_addr = websocket.remote_address
         log.info(f"New WebSocket client connected: {client_addr}")
         self.clients.append(websocket)
+        self.client_connected.set()
         
         try:
             # Wyślij historię konwersacji do nowego klienta
@@ -121,25 +123,36 @@ class WebSocketUI(UIBase):
     async def _handle_client_message(self, data: Dict[str, Any]):
         """Obsłuż wiadomość od klienta"""
         msg_type = data.get("type")
+        log.info(f"Received client message: type={msg_type}")
         
         if msg_type == "user_response" and self.question_response_future:
             # Odpowiedź na oczekujące pytanie
             response_data = data.get("content", {})
+            log.info(f"Processing user response: {response_data}")
+            
             user_input = UserInput(
                 text=response_data.get("text"),
                 button=response_data.get("button"),
                 cancelled=response_data.get("cancelled", False)
             )
             
+            log.info(f"Created UserInput: text='{user_input.text}', button='{user_input.button}', cancelled={user_input.cancelled}")
+            
             # Zwróć odpowiedź do ask_question
             if not self.question_response_future.done():
+                log.info("Setting response future result")
                 self.question_response_future.set_result(user_input)
+            else:
+                log.warning("Response future already done!")
             
             self.pending_question = None
             
         elif msg_type == "ping":
             # Odpowiedź na ping
+            log.debug("Received ping, sending pong")
             await self._broadcast_to_clients(WebSocketMessage("pong"))
+        else:
+            log.warning(f"Unknown message type or no pending question: {msg_type}")
 
     async def _send_to_client(self, client: websockets.WebSocketServerProtocol, message: WebSocketMessage):
         """Wyślij wiadomość do konkretnego klienta"""
@@ -226,8 +239,12 @@ class WebSocketUI(UIBase):
     ) -> UserInput:
         """Zadaj pytanie i czekaj na odpowiedź przez WebSocket"""
         
+        log.info(f"Asking question: {question[:100]}{'...' if len(question) > 100 else ''}")
+        log.info(f"Question details - buttons: {buttons}, buttons_only: {buttons_only}, default: {default}")
+        
         if not self.clients:
-            raise UIClosedError("No WebSocket clients connected")
+            log.info("No WebSocket clients connected, waiting for connection...")
+            await self.client_connected.wait()
         
         # Stwórz pytanie
         question_data = {
@@ -250,6 +267,8 @@ class WebSocketUI(UIBase):
             extra_info=extra_info
         )
         
+        log.info(f"Sending question to {len(self.clients)} client(s)")
+        
         # Wyślij pytanie do wszystkich klientów
         await self._broadcast_to_clients(self.pending_question)
         
@@ -257,15 +276,21 @@ class WebSocketUI(UIBase):
         self.question_response_future = asyncio.Future()
         
         try:
+            log.info("Waiting for user response...")
             # Czekaj na odpowiedź (z timeoutem 300 sekund)
             user_input = await asyncio.wait_for(self.question_response_future, timeout=300)
+            log.info(f"Received user response: text='{user_input.text}', button='{user_input.button}', cancelled={user_input.cancelled}")
             return user_input
         except asyncio.TimeoutError:
+            log.error("Question timeout - no response received within 300 seconds")
             self.pending_question = None
             raise UIClosedError("Question timeout - no response received")
         except Exception as e:
+            log.error(f"Error waiting for response: {e}")
             self.pending_question = None
             raise UIClosedError(f"Error waiting for response: {e}")
+        finally:
+            self.pending_question = None
 
     # Implementacje pozostałych metod z UIBase
     

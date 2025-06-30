@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPT-Pilot - Log Komunikacji</title>
+    <style>
+        body { font-family: monospace; margin: 0; padding: 20px; background-color: #f5f5f5; }
+        #log-container { 
+            white-space: pre-wrap; 
+            background-color: #ffffff; 
+            border: 1px solid #ccc; 
+            padding: 15px; 
+            height: 80vh; 
+            overflow-y: scroll; 
+            border-radius: 5px;
+        }
+        .message { margin-bottom: 5px; }
+        .source-APP { color: #007bff; }
+        .source-AGENT { color: #28a745; }
+        .source-BROKER { color: #6c757d; font-style: italic; }
+        .source-BROKER_ERROR { color: #dc3545; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Log Komunikacji na Żywo</h1>
+    <div id="log-container"></div>
+
+    <script>
+        const logContainer = document.getElementById('log-container');
+        const ws = new WebSocket('ws://127.0.0.1:8765');
+
+        function addMessage(message) {
+            const messageElement = document.createElement('div');
+            messageElement.className = 'message';
+            
+            // Proste parsowanie, aby dodać klasy kolorujące
+            if (message.startsWith('[APP]')) {
+                messageElement.classList.add('source-APP');
+            } else if (message.startsWith('[AGENT]')) {
+                messageElement.classList.add('source-AGENT');
+            } else if (message.startsWith('[BROKER]')) {
+                messageElement.classList.add('source-BROKER');
+            } else if (message.startsWith('[BROKER_ERROR]')) {
+                messageElement.classList.add('source-BROKER_ERROR');
+            }
+
+            messageElement.textContent = message;
+            logContainer.appendChild(messageElement);
+            // Automatyczne przewijanie do dołu
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        ws.onopen = function() {
+            addMessage('[BROKER] Połączono z serwerem WebSocket.');
+        };
+
+        ws.onmessage = function(event) {
+            addMessage(event.data);
+        };
+
+        ws.onclose = function() {
+            addMessage('[BROKER] Rozłączono z serwerem WebSocket.');
+        };
+
+        ws.onerror = function(error) {
+            addMessage('[BROKER_ERROR] Błąd WebSocket: ' + error);
+        };
+    </script>
+</body>
+</html>

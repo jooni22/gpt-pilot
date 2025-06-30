@@ -15,7 +15,7 @@ from core.db.setup import run_migrations
 from core.log import setup
 from core.state.state_manager import StateManager
 from core.ui.base import UIBase
-from core.ui.console import PlainConsoleUI
+from core.ui.flexible_console import FlexibleConsoleUI
 from core.ui.ipc_client import IPCClientUI
 from core.ui.virtual import VirtualUI
 
@@ -321,7 +321,7 @@ def init() -> tuple[UIBase, SessionManager, Namespace]:
     elif config.ui.type == UIAdapter.VIRTUAL:
         ui = VirtualUI(config.ui.inputs)
     else:
-        ui = PlainConsoleUI()
+        ui = FlexibleConsoleUI()
 
     run_migrations(config.db)
     db = SessionManager(config.db)
