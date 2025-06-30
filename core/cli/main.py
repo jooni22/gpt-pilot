@@ -31,9 +31,6 @@ async def cleanup(ui: UIBase):
     await ui.stop()
 
 
-def sync_cleanup(ui: UIBase):
-    asyncio.run(cleanup(ui))
-
 
 async def run_project(sm: StateManager, ui: UIBase, args) -> bool:
     """
@@ -288,17 +285,19 @@ async def async_main(
 
     telemetry.start()
 
+    loop = asyncio.get_running_loop()
+
     # Set up signal handlers
     def signal_handler(sig, frame):
         if not telemetry_sent:
-            sync_cleanup(ui)
+            loop.create_task(cleanup(ui))
         sys.exit(0)
 
     for sig in (signal.SIGINT, signal.SIGTERM):
         signal.signal(sig, signal_handler)
 
     # Register the cleanup function
-    atexit.register(sync_cleanup, ui)
+    atexit.register(lambda: loop.create_task(cleanup(ui)))
 
     try:
         success = await run_pythagora_session(sm, ui, args)
